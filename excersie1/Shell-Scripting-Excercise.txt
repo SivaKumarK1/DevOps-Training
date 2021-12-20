@@ -1,0 +1,13 @@
+1. Write a shell script sum.sh that takes an unspecified number of command line arguments (up
+to 9) of ints and finds their sum.
+
+2. Write a shell script takes the name a path (eg: /afs/andrew/course/15/123/handin), and counts
+all the sub directories (recursively).
+
+3. Write a shell script that takes a name of a 1 as a command line argument, and produce a
+file that contains the names of all sub 1s with size 0 (that is empty sub 1s)
+
+4. Write a shell script that takes a name of a 1, and delete all sub 1s of size 0
+
+5. write a shell script that will take an input file and remove identical lines (or duplicate lines
+from the file)
