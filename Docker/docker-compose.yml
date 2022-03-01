@@ -1,0 +1,101 @@
+version: "2"
+services:
+  # Dev Environment
+  nginx-dev:
+    build: ./dev/nginx/
+    container_name: nginx-container-dev
+    ports:
+      - "8008:80"
+    links:
+      - php-dev
+    volumes:
+      - "./dev/app/:/var/www/app"
+    volumes_from:
+      - app-data-dev
+  php-dev:
+    build: ./dev/php/
+    container_name: php-container-dev
+    ports:
+      - "9001:80"
+    expose:
+      - 9000
+    links:
+      - mysql-dev
+    volumes_from:
+      - app-data-dev
+  app-data-dev:
+    image: "php:7.0-fpm"
+    container_name: app-data-container-dev
+    # volumes:
+    #  - './dev/www/html/:/var/www/html/'
+    command: "true"
+  mysql-dev:
+    image: "mysql:5.7"
+    container_name: mysql-container-dev
+    ports:
+      - "3307:3306"
+    volumes_from:
+      - mysql-data-dev
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: password
+  mysql-data-dev:
+    image: "mysql:5.7"
+    container_name: mysql-data-container-dev
+    volumes:
+      - /var/lib/mysql
+    command: "true"
+
+  # Test Environment
+  nginx-test:
+    build: test/nginx/
+    container_name: nginx-container-test
+    ports:
+      - "8009:80"
+    #  volumes:
+    #  - "./test/app/:/var/www/app"
+    links:
+      - php-test
+    volumes_from:
+      - app-data-test
+  php-test:
+    build: test/php/
+    container_name: php-container-test
+    ports:
+      - "9002:80"
+    expose:
+      - 9000
+    links:
+      - mysql-test
+    volumes_from:
+      - app-data-test
+  app-data-test:
+    image: "php:7.0-fpm"
+    container_name: app-data-container-test
+    volumes:
+      - "./test/www/html/:/var/www/html/"
+    command: "true"
+  mysql-test:
+    image: "mysql:5.7"
+    container_name: mysql-container-test
+    ports:
+      - "3308:3306"
+    volumes_from:
+      - mysql-data-test
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: password
+  mysql-data-test:
+    image: "mysql:5.7"
+    container_name: mysql-data-container-test
+    volumes:
+      - /var/lib/mysql
+    command: "true"
+networks:
+  default:
+    external:
+      name: net
